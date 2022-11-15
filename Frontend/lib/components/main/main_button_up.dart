@@ -16,9 +16,11 @@ import 'package:homealone/api/api_message.dart';
 import 'package:homealone/components/dialog/basic_dialog.dart';
 import 'package:homealone/components/dialog/report_dialog.dart';
 import 'package:homealone/components/dialog/sos_dialog.dart';
+import 'package:homealone/components/permission/permission_service.dart';
 import 'package:homealone/constants.dart';
 import 'package:homealone/pages/emergency_manual_page.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 import 'package:volume_control/volume_control.dart';
@@ -312,8 +314,11 @@ class _MainButtonUpState extends State<MainButtonUp> {
               blurRadius: 7.5,
               isOutline: true,
               type: PredefinedThemes.danger,
-              onTap: () {
-                return sendEmergencyMessage();
+              onTap: () async {
+                if (await Permission.sms.isDenied) {
+                  PermissionService().permissionSMS(context);
+                } else
+                  return sendEmergencyMessage();
               },
               child: Row(
                 children: [

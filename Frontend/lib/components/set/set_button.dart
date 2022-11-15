@@ -15,8 +15,11 @@ import 'package:homealone/providers/heart_rate_provider.dart';
 import 'package:homealone/providers/switch_provider.dart';
 import 'package:icon_animated/widgets/icon_animated.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
+
+import '../permission/permission_service.dart';
 
 AuthService authService = AuthService();
 const methodChannel = MethodChannel("com.ssafy.homealone/channel");
@@ -87,6 +90,13 @@ class _SetButtonState extends State<SetButton>
         parent: _animationController, curve: Curves.easeInOutCirc));
     setFirstResponderProvider();
     getEmergencyCallList();
+    permitLocationAlways();
+  }
+
+  void permitLocationAlways() async {
+    if (await Permission.locationAlways.isGranted != true) {
+      PermissionService().permissionBackground(context);
+    }
   }
 
   void setFirstResponderProvider() {

@@ -10,9 +10,11 @@ import 'package:homealone/googleLogin/modify_userinfo_page.dart';
 import 'package:homealone/googleLogin/sign_up_page.dart';
 import 'package:homealone/pages/safe_area_cctv_page.dart';
 import 'package:homealone/providers/user_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
+import '../components/permission/permission_service.dart';
 import '../constants.dart';
 import '../pages/main_page.dart';
 import '../pages/set_page.dart';
@@ -129,6 +131,13 @@ class _TabNavBarState extends State<TabNavBar> {
     super.initState();
     checkUserInfo();
     handlePlatformChannelMethods(context);
+    permitLocation();
+  }
+
+  void permitLocation() async {
+    if (await Permission.location.isDenied) {
+      PermissionService().permissionLocation(context);
+    }
   }
 
   @override
